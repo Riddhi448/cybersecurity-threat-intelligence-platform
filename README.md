@@ -144,6 +144,26 @@ The model is an experimental analysis tool trained on labeled historical data. I
 
 The objective is to demonstrate how data analytics, SQL, interactive dashboards, and machine learning can be combined to support cybersecurity threat analysis and network traffic monitoring.
 
+## Application Screenshots
+
+### 1. Security Dashboard
+![Security Dashboard](screenshots/Security_dashboard.png)
+
+### 2. Traffic Explorer
+![Traffic Explorer](screenshots/Traffic_explorer.png)
+
+### 3. Dataset Profile
+![Dataset Profile](screenshots/dataset_profile.png)
+
+### 4. SQL Threat Analytics
+![SQL Threat Analytics](screenshots/SQL_threat_analytics.png)
+
+### 5. Machine Learning Threat Detection
+![ML Threat Detection](screenshots/ml_threat_detection.png)
+
+### 6. Model Evaluation - Confusion Matrix
+![Confusion Matrix](screenshots/confusion_matrix_heatmap.png)
+
 ## Future Enhancements
 
 - Deploy the application for public access.
