@@ -4,6 +4,7 @@ import pandas as pd
 import sqlite3
 import plotly.express as px
 from pathlib import Path
+import hashlib
 
 def style_security_chart(fig):
     fig.update_layout(
@@ -205,10 +206,39 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATABASE_PATH = PROJECT_ROOT / "database" / "cybersecurity.db"
 
-def run_sql_query(query):
-    with sqlite3.connect(DATABASE_PATH) as connection:
-        return pd.read_sql_query(query, connection)
+@st.cache_resource
+def create_sql_connection(file_hash, _dataframe):
 
+    connection = sqlite3.connect(
+        ":memory:",
+        check_same_thread=False
+    )
+
+    sql_df = _dataframe.copy()
+
+    # Standardize column names
+    sql_df.columns = [
+        str(column).strip()
+        .lower()
+        .replace(" ", "_")
+        .replace("-", "_")
+        .replace("/", "_")
+        for column in sql_df.columns
+    ]
+
+    # Create SQL table from uploaded dataset
+    sql_df.to_sql(
+        "network_traffic",
+        connection,
+        if_exists="replace",
+        index=False
+    )
+
+    return connection
+
+
+def run_sql_query(query):
+   return pd.read_sql_query(query, SQL_CONNECTION)
 st.caption(
     "Network traffic analytics | Attack patterns | Security monitoring"
 )
@@ -267,6 +297,15 @@ df[label_column] = (
     .astype(str)
     .str.strip()
     .str.replace("\ufffd", "-", regex=False)
+)
+# Initialize SQL database from uploaded dataset
+file_hash = hashlib.sha256(
+    uploaded_file.getvalue()
+).hexdigest()
+
+SQL_CONNECTION = create_sql_connection(
+    file_hash,
+    df
 )
 
 # Standard CIC-IDS2017 benign label
